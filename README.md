@@ -84,14 +84,14 @@ Here is a simple program demonstrating how to use the pool.
 void *my_task(void *arg) {
     int id = *(int*)arg;
     printf("Task %d is starting...\n", id);
-    
+
     /* Simulate some work */
-    sleep(1); 
-    
+    sleep(1);
+
     printf("Task %d is finishing.\n", id);
-    
-    free(arg); 
-    
+
+    free(arg);
+
     return NULL;
 }
 
@@ -108,7 +108,7 @@ int main() {
     for (int i = 0; i < 10; i++) {
         int *task_id = malloc(sizeof(int));
         *task_id = i + 1;
-        
+
         /* Submit the task */
         thread_pool_submit(pool, my_task, task_id);
     }
@@ -120,7 +120,7 @@ int main() {
     thread_pool_destroy(pool);
 
     printf("Thread pool destroyed. Exiting.\n");
-    
+
     return 0;
 }
 ```
@@ -129,7 +129,7 @@ int main() {
 
 ## Building & Running Benchmarks
 
-The project includes a `benches.c` file to test performance. You can compile and run it easily with the steps below:
+The project includes a `benches.c` file to test performance. You can compile and run it with the following commands:
 
 ### Compilation
 
@@ -142,9 +142,9 @@ make bench1 # For queue-per-thread bench
 ### Running
 
 ```bash
-./bin/bench_queue_per_thread
-# or
 ./bin/bench_global_queue
+# or
+./bin/bench_queue_per_thread
 ```
 
 -----
@@ -175,7 +175,7 @@ Avg latency: 1.54 μs/task
 
 ### 2\. Thread Scaling
 
-This test shows how performance scales as we add more threads. The ideal is to have the speedup match the thread count (e.g., 8 threads = 8x speedup), but contention and overhead limit this.
+This test shows how performance scales as we add more threads. The ideal is to have the speedup match the thread count (8 threads = 8x speedup), but contention and overhead limit this.
 
 ```
 Benchmark: Thread performance
@@ -191,8 +191,8 @@ Thread Count | Time (s) | Throughput (tasks/s) | Speedup
 
 **Conclusion:**
 
-  * **Scaling** up to 4 threads (on an 8-core machine), achieving a near-linear 2.34x speedup.
-  * **Diminishing returns** past 8 threads (hyper-threading), as contention for system resources increases.
+  * **Scaling** up to 4 threads (on an 8-core machine), achieving a 2.34x speedup.
+  * **Diminishing returns** past 4 threads, as contention for system resources increases.
 
 ### 3\. Comparison vs. Naive `pthread_create`
 
