@@ -1,6 +1,6 @@
 
 CC=clang
-CFLAGS=-Wall -Wpedantic -Werror -fsanitize=thread -O2 -std=c11
+CFLAGS=-Wall -Wpedantic -Werror -O2 -std=c11
 
 bench: benches.c pool_global_queue.c
 	$(CC) $(CFLAGS) -o bin/bench_global_queue benches.c pool_global_queue.c

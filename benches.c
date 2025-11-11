@@ -75,11 +75,11 @@ void benchmark_throughput(int thread_count, int num_tasks) {
 }
 
 void benchmark_num_threads(void) {
-    printf("\nBenchmark: Thread performance\n");
+    int num_tasks = 500000;
+    printf("\nBenchmark: Thread performance (%d tasks)\n", num_tasks);
     printf("Thread Count | Time (s) | Throughput (tasks/s) | Speedup\n");
     printf("-------------|----------|----------------------|--------\n");
 
-    int num_tasks = 500000;
     double baseline_time = 0;
 
     int thread_counts[] = {1, 2, 4, 8, 16, 32};
@@ -176,7 +176,7 @@ int main(void) {
 
     srand(time(NULL));
 
-    benchmark_throughput(4, 100000);
+    benchmark_throughput(8, 500000);
 
     benchmark_num_threads();
 

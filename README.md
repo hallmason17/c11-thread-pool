@@ -164,34 +164,34 @@ This test measures how many trivial tasks the pool can process per second.
           THREAD POOL BENCHMARKS
 ===========================================
 
-Benchmark: Throughput (4 threads, 100000 tasks)
-Completed: 100000 tasks
-Time: 0.154 seconds
-Throughput: 647471 tasks/sec
-Avg latency: 1.54 μs/task
+Benchmark: Throughput (8 threads, 500000 tasks)
+Completed: 500000 tasks
+Time: 0.411 seconds
+Throughput: 1216652 tasks/sec
+Avg latency: 0.82 μs/task
 ```
 
-**Conclusion:** The pool can process over 600,000 tasks per second with an average overhead of only \~1.54 microseconds per task.
+**Conclusion:** The pool can process over 1,000,000 tasks per second with an average overhead of only \~0.82 microseconds per task.
 
 ### 2\. Thread Scaling
 
 This test shows how performance scales as we add more threads. The ideal is to have the speedup match the thread count (8 threads = 8x speedup), but contention and overhead limit this.
 
 ```
-Benchmark: Thread performance
+Benchmark: Thread performance (500,000 tasks)
 Thread Count | Time (s) | Throughput (tasks/s) | Speedup
 -------------|----------|----------------------|--------
-           1 |    1.167 |               428553 |   1.00x
-           2 |    0.662 |               755026 |   1.76x
-           4 |    0.499 |              1002113 |   2.34x
-           8 |    0.852 |               586594 |   1.37x
-          16 |    0.871 |               574350 |   1.34x
-          32 |    0.838 |               596457 |   1.39x
+           1 |    0.373 |              1341026 |   1.00x
+           2 |    0.205 |              2435581 |   1.82x
+           4 |    0.151 |              3311655 |   2.47x
+           8 |    0.162 |              3090883 |   2.30x
+          16 |    0.423 |              1180641 |   0.88x
+          32 |    0.469 |              1066075 |   0.79x
 ```
 
 **Conclusion:**
 
-  * **Scaling** up to 4 threads (on an 8-core machine), achieving a 2.34x speedup.
+  * **Scaling** up to 8 threads (on an 8-core machine), achieving a 2.30x speedup.
   * **Diminishing returns** past 4 threads, as contention for system resources increases.
 
 ### 3\. Comparison vs. Naive `pthread_create`
@@ -202,17 +202,17 @@ This test highlights the advantage of using a thread pool: re-using threads is f
 Benchmark: Thread pool vs Pthread per task
 
 Thread Pool (8 threads)
-Time: 0.002 seconds
-Throughput: 621563 tasks/sec
+Time: 0.001 seconds
+Throughput: 1129931 tasks/sec
 
 Pthread per task (time includes creation and joining)
-Time: 0.047 seconds
-Throughput: 21110 tasks/sec
+Time: 0.012 seconds
+Throughput: 82177 tasks/sec
 
-Speedup: 29.44x faster with thread pool
+Speedup: 13.75x faster with thread pool
 ```
 
-**Conclusion:** For this workload, the thread pool is over **29 times faster** than creating and joining a new `pthread` for each task. This demonstrates the massive overhead of thread creation/destruction that the pool successfully avoids.
+**Conclusion:** For this workload, the thread pool is over **13 times faster** than creating and joining a new `pthread` for each task. This demonstrates the massive overhead of thread creation/destruction that the pool successfully avoids.
 
 -----
 
