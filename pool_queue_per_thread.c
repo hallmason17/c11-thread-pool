@@ -91,7 +91,6 @@ int thread_pool_submit(thread_pool_t *pool, void *(*func)(void *), void *arg) {
   return 1;
 }
 
-/* Assumes you hold the lock already */
 task_t *dequeue_task(worker_queue_t *queue) {
   if (queue->task_queue_head == NULL) {
     return NULL;
@@ -189,6 +188,7 @@ void thread_pool_destroy(thread_pool_t *pool) {
     pthread_mutex_unlock(&pool->worker_queues[i].mu);
   }
 
+  /* Free all the worker_args structs we allocated. */
   for (int i = 0; i < pool->num_threads; i++) {
     void *args = NULL;
     pthread_join(pool->workers[i], &args);
@@ -196,6 +196,7 @@ void thread_pool_destroy(thread_pool_t *pool) {
   }
 
   for (int i = 0; i < pool->num_threads; i++) {
+    /* Clean up remaining tasks (there shouldn't be any) */
     task_t *t = pool->worker_queues[i].task_queue_head;
     while (t) {
       task_t *tmp = t;
