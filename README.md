@@ -134,17 +134,7 @@ The project includes a `benches.c` file to test performance. You can compile and
 ### Compilation
 
 ```bash
-make bench # For global queue bench
-# or
-make bench1 # For queue-per-thread bench
-```
-
-### Running
-
-```bash
-./bin/bench_global_queue
-# or
-./bin/bench_queue_per_thread
+make bench # Runs all benchmarks
 ```
 
 -----
@@ -178,21 +168,21 @@ Avg latency: 0.82 μs/task
 This test shows how performance scales as we add more threads. The ideal is to have the speedup match the thread count (8 threads = 8x speedup), but contention and overhead limit this.
 
 ```
-Benchmark: Thread performance (500,000 tasks)
+Benchmark: Thread performance (500000 tasks)
 Thread Count | Time (s) | Throughput (tasks/s) | Speedup
 -------------|----------|----------------------|--------
-           1 |    0.373 |              1341026 |   1.00x
-           2 |    0.205 |              2435581 |   1.82x
-           4 |    0.151 |              3311655 |   2.47x
-           8 |    0.162 |              3090883 |   2.30x
-          16 |    0.423 |              1180641 |   0.88x
-          32 |    0.469 |              1066075 |   0.79x
+           1 |    0.606 |               824848 |   1.00x
+           2 |    0.318 |              1574034 |   1.91x
+           4 |    0.173 |              2882925 |   3.50x
+           8 |    0.153 |              3261963 |   3.95x
+          16 |    0.596 |               838745 |   1.02x
+          32 |    0.591 |               845467 |   1.02x
 ```
 
 **Conclusion:**
 
-  * **Scaling** up to 8 threads (on an 8-core machine), achieving a 2.30x speedup.
-  * **Diminishing returns** past 4 threads, as contention for system resources increases.
+  * **Scaling** up to 8 threads (on an 8-core machine), achieving a 3.95x speedup and over 3mil tasks per second.
+  * **Diminishing returns** past 8 threads (hyper-threading), as contention for system resources increases.
 
 ### 3\. Comparison vs. Naive `pthread_create`
 
@@ -202,17 +192,17 @@ This test highlights the advantage of using a thread pool: re-using threads is f
 Benchmark: Thread pool vs Pthread per task
 
 Thread Pool (8 threads)
-Time: 0.001 seconds
-Throughput: 1129931 tasks/sec
+Time: 0.013 seconds
+Throughput: 779842 tasks/sec
 
 Pthread per task (time includes creation and joining)
-Time: 0.012 seconds
-Throughput: 82177 tasks/sec
+Time: 0.661 seconds
+Throughput: 15130 tasks/sec
 
-Speedup: 13.75x faster with thread pool
+Speedup: 51.54x faster with thread pool
 ```
 
-**Conclusion:** For this workload, the thread pool is over **13 times faster** than creating and joining a new `pthread` for each task. This demonstrates the massive overhead of thread creation/destruction that the pool successfully avoids.
+**Conclusion:** For this workload, the thread pool is over **51 times faster** than creating and joining a new `pthread` for each task. This demonstrates the massive overhead of thread creation/destruction that the pool successfully avoids.
 
 -----
 
