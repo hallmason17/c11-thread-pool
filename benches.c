@@ -123,13 +123,14 @@ void *thread_per_task_worker(void *arg) {
 void benchmark_vs_naive(void) {
     printf("\nBenchmark: Thread pool vs Pthread per task\n");
 
-    int num_tasks = 1000;
+    int num_tasks = 10000;
 
     printf("\nThread Pool (8 threads)\n");
     tasks_completed = 0;
     my_timer_t timer1;
 
     thread_pool_t *pool = thread_pool_create(8);
+
     timer_start(&timer1);
 
     for (int i = 0; i < num_tasks; i++) {

@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <threads.h>
 #include <unistd.h>
 
 #define SHUTDOWN 1 << 0

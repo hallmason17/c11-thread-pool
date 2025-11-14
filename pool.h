@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <threads.h>
 #include <unistd.h>
 /* Handle to the thread pool */
 typedef struct thread_pool_t thread_pool_t;
